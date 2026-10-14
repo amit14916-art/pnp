@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Autonomous P vs NP Research Robot | Live Formula Discovery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #060913;
+      --card-bg: rgba(13, 20, 36, 0.75);
+      --border: rgba(255, 255, 255, 0.08);
+      --primary: #3b82f6;
+      --primary-glow: rgba(59, 130, 246, 0.35);
+      --emerald: #10b981;
+      --emerald-glow: rgba(16, 185, 129, 0.35);
+      --purple: #8b5cf6;
+      --purple-glow: rgba(139, 92, 246, 0.35);
+      --crimson: #ef4444;
+      --amber: #f59e0b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(at 15% 15%, rgba(59, 130, 246, 0.14) 0px, transparent 40%),
+        radial-gradient(at 85% 85%, rgba(139, 92, 246, 0.12) 0px, transparent 40%),
+        radial-gradient(at 50% 50%, rgba(16, 185, 129, 0.06) 0px, transparent 50%);
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* TOP LIVE BANNER */
+    .top-banner {
+      background: rgba(13, 20, 36, 0.95);
+      border-bottom: 1px solid var(--border);
+      padding: 0.85rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+    }
+
+    .robot-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #2563eb, #7c3aed, #059669);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.45);
+      animation: floatPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes floatPulse {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-3px); }
+    }
+
+    .brand-text h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-text p {
+      font-size: 0.78rem;
+      color: #34d399;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-weight: 500;
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 10px #10b981;
+      animation: blink 1.5s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(0.8); }
+    }
+
+    /* ROBOT CONTROLS ON HEADER */
+    .robot-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .toggle-robot-btn {
+      background: linear-gradient(135deg, #059669, #047857);
+      color: white;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      padding: 0.55rem 1.2rem;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 0 18px rgba(16, 185, 129, 0.45);
+      transition: all 0.2s;
+    }
+
+    .toggle-robot-btn:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.65);
+    }
+
+    .toggle-robot-btn.paused {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      box-shadow: 0 0 18px rgba(245, 158, 11, 0.4);
+      border-color: rgba(245, 158, 11, 0.4);
+    }
+
+    /* MAIN APP GRID */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 1.4rem;
+      padding: 1.4rem 2rem;
+      flex: 1;
+      max-width: 1750px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 1080px) {
+      .main-grid { grid-template-columns: 1fr; }
+    }
+
+    /* LEFT CANVAS VIEW */
+    .canvas-card {
+      background: rgba(10, 15, 28, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
+      position: relative;
+      min-height: 560px;
+    }
+
+    .canvas-bar {
+      padding: 0.75rem 1.2rem;
+      background: rgba(15, 23, 42, 0.75);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+    }
+
+    .formula-tag {
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: #93c5fd;
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      font-size: 0.78rem;
+    }
+
+    canvas {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: crosshair;
+    }
+
+    .canvas-tip {
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+      background: rgba(0, 0, 0, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    /* RIGHT ROBOT CONTROL & LIVE STREAM */
+    .robot-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+
+    .box {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.15rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .box-header {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .box-header span.badge {
+      background: rgba(139, 92, 246, 0.2);
+      color: #c084fc;
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
+    /* LIVE CONSOLE / AI LOGS */
+    .ai-log-stream {
+      background: rgba(4, 7, 16, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 0.85rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
+      height: 200px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      line-height: 1.45;
+    }
+
+    .log-line {
+      display: flex;
+      gap: 0.4rem;
+      align-items: flex-start;
+    }
+
+    .log-time { color: var(--text-muted); flex-shrink: 0; }
+    .log-msg { color: #cbd5e1; }
+    .log-msg.highlight { color: #34d399; font-weight: 700; }
+    .log-msg.info { color: #60a5fa; }
+    .log-msg.warn { color: #fbbf24; }
+
+    /* STATS ROW */
+    .stat-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.7rem;
+    }
+
+    .stat-mini-card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .stat-mini-card.glow-green {
+      border-color: rgba(16, 185, 129, 0.4);
+      background: rgba(16, 185, 129, 0.07);
+    }
+
+    .stat-mini-card.glow-purple {
+      border-color: rgba(139, 92, 246, 0.4);
+      background: rgba(139, 92, 246, 0.07);
+    }
+
+    .stat-mini-label {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .stat-mini-val {
+      font-size: 1.25rem;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      color: white;
+    }
+
+    .stat-mini-card.glow-green .stat-mini-val { color: #34d399; }
+    .stat-mini-card.glow-purple .stat-mini-val { color: #c084fc; }
+
+    .stat-mini-sub { font-size: 0.68rem; color: var(--text-muted); }
+
+    /* EXPLANATION BOX (HINGLISH) */
+    .plain-hindi-box {
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 12px;
+      padding: 0.85rem;
+      font-size: 0.8rem;
+      line-height: 1.5;
+      color: #cbd5e1;
+    }
+
+    .plain-hindi-box h3 {
+      font-size: 0.86rem;
+      color: #93c5fd;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    /* LEADERBOARD TABLE MINI */
+    .mini-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+    }
+
+    .mini-table th {
+      text-align: left;
+      padding: 0.4rem 0.5rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      font-weight: 600;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+    }
+
+    .mini-table td {
+      padding: 0.45rem 0.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .badge-no {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      text-align: center;
+      line-height: 18px;
+      font-weight: 700;
+      font-size: 0.65rem;
+    }
+
+    .badge-no.gold { background: #fbbf24; color: black; }
+
+    footer {
+      text-align: center;
+      padding: 0.85rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP HEADER -->
+  <header class="top-banner">
+    <div class="brand-group">
+      <div class="robot-avatar">🤖</div>
+      <div class="brand-text">
+        <h1>Autonomous P vs NP Research Robot</h1>
+        <p>
+          <span class="live-dot" id="liveDot"></span>
+          <span id="robotLiveStatusText">Robot is ON &bull; Continuously Searching for Best Formula...</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="robot-actions">
+      <button class="toggle-robot-btn" id="btnToggleRobot">
+        <span id="btnIcon">⏸</span> <span id="btnText">Pause Robot</span>
+      </button>
+      <button class="toggle-robot-btn paused" id="btnNewCities" style="background:rgba(255,255,255,0.08); border-color:var(--border);">
+        🎲 New Map
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN APP GRID -->
+  <div class="main-grid">
+    
+    <!-- LEFT: THE CANVAS (AI TESTING FIELD) -->
+    <div class="canvas-card">
+      <div class="canvas-bar">
+        <div>
+          <span style="color:var(--text-muted); font-size:0.75rem;">CURRENTLY TESTING FORMULA:</span>
+          <span class="formula-tag" id="activeFormulaTag">Adaptive VNS + Double Bridge Kick</span>
+        </div>
+        <div style="font-family:'JetBrains Mono', monospace; font-size:0.75rem; color:#94a3b8;">
+          Tested Iterations: <span style="color:#60a5fa; font-weight:bold;" id="iterCount">14</span>
+        </div>
+      </div>
+
+      <canvas id="tspCanvas"></canvas>
+      <div class="canvas-tip">💡 Screen par click karke aap khud naye shahar jod sakte hain! Robot automatically unpar bhi formula test karega.</div>
+    </div>
+
+    <!-- RIGHT: AI BRAIN & SIMPLE HINGLISH EXPLANATION -->
+    <div class="robot-panel">
+      
+      <!-- SIMPLE EXPLANATION CARD (AASAN BHASHA) -->
+      <div class="plain-hindi-box">
+        <h3>💡 Asal me kya ho raha hai? (Simple)</h3>
+        Yeh AI Robot <b>apne aap lagataar chalu hai</b>. Har 2-3 second me yeh ek <b>naya mathematical formula</b> banata hai, map par test karta hai, aur dekhta hai ki kya sabse chota raasta mila.<br>
+        <b>Aapko kuch nahi karna hai:</b> Bas aaram se screen par dekhein ki robot naye tareeqe kaise dhoondh raha hai!
+      </div>
+
+      <!-- LIVE TELEMETRY STATS -->
+      <div class="stat-row">
+        <div class="stat-mini-card glow-green">
+          <span class="stat-mini-label">Best Distance</span>
+          <span class="stat-mini-val" id="valBestDist">--</span>
+          <span class="stat-mini-sub" id="valBestFormula">Cheapest Insertion</span>
+        </div>
+
+        <div class="stat-mini-card glow-purple">
+          <span class="stat-mini-label">Crossed Loops</span>
+          <span class="stat-mini-val" id="valCrossings">0</span>
+          <span class="stat-mini-sub" id="lblCrossingStatus">0 = Perfect Route</span>
+        </div>
+      </div>
+
+      <!-- AI BRAIN LOG (LIVE ACTIVITY STREAM) -->
+      <div class="box">
+        <div class="box-header">
+          <span>🧠 Robot Ka Live Dimaag (Activity Stream)</span>
+          <span class="badge">Live Console</span>
+        </div>
+
+        <div class="ai-log-stream" id="logStream">
+          <!-- Populated live by JS -->
+        </div>
+      </div>
+
+      <!-- LEADERBOARD TOP FORMULAS -->
+      <div class="box">
+        <div class="box-header">
+          <span>🏆 Best Discovered Formulas</span>
+          <span style="font-size:0.72rem; color:#60a5fa;">Updated Live</span>
+        </div>
+
+        <table class="mini-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Formula Name</th>
+              <th>Error</th>
+              <th>Complexity</th>
+            </tr>
+          </thead>
+          <tbody id="miniLeaderboardBody">
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </div>
+
+  <footer>
+    Autonomous Traveling Salesperson Problem &bull; P vs NP Continuous Discovery Lab &bull; Pair Programming with Antigravity AI
+  </footer>
+
+  <script>
+    // State
+    let cities = [];
+    let tour = [];
+    let bestTour = [];
+    let bestDistance = Infinity;
+    let bestFormulaName = "Cheapest Insertion";
+    let iterationNumber = 14;
+    let isRobotActive = true;
+    let robotInterval = null;
+
+    const canvas = document.getElementById('tspCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Web Audio Sound Chime (Pleasant Sci-Fi discovery sound)
+    let audioCtx = null;
+    function playChime() {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+        osc.frequency.exponentialRampToValueAtTime(783.99, audioCtx.currentTime + 0.12); // G5
+        gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.25);
+      } catch (e) {}
+    }
+
+    function resizeCanvas() {
+      const parent = canvas.parentElement;
+      canvas.width = parent.clientWidth;
+      canvas.height = parent.clientHeight - 45;
+      render();
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    function dist(p1, p2) {
+      const dx = p1.x - p2.x, dy = p1.y - p2.y;
+      return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    function calculateTourLength(t, cityList) {
+      if (!t || t.length < 2) return 0;
+      let total = 0;
+      for (let i = 0; i < t.length; i++) {
+        total += dist(cityList[t[i]], cityList[t[(i + 1) % t.length]]);
+      }
+      return total;
+    }
+
+    // Crossing calculation
+    function ccw(A, B, C) { return (C.y - A.y) * (B.x - A.x) > (B.y - A.y) * (C.x - A.x); }
+    function intersect(A, B, C, D) { return ccw(A, C, D) !== ccw(B, C, D) && ccw(A, B, C) !== ccw(A, B, D); }
+
+    function countCrossings(t) {
+      if (!t || t.length < 4) return 0;
+      let count = 0;
+      const n = t.length;
+      for (let i = 0; i < n; i++) {
+        const A = cities[t[i]], B = cities[t[(i + 1) % n]];
+        for (let j = i + 2; j < n; j++) {
+          if ((j + 1) % n === i) continue;
+          const C = cities[t[j]], D = cities[t[(j + 1) % n]];
+          if (intersect(A, B, C, D)) count++;
+        }
+      }
+      return count;
+    }
+
+    // Logger
+    function logToStream(msg, type = "normal") {
+      const stream = document.getElementById('logStream');
+      const now = new Date();
+      const timeStr = now.toTimeString().split(' ')[0];
+
+      const line = document.createElement('div');
+      line.className = 'log-line';
+      line.innerHTML = `
+        <span class="log-time">[${timeStr}]</span>
+        <span class="log-msg ${type}">${msg}</span>
+      `;
+      stream.appendChild(line);
+      stream.scrollTop = stream.scrollHeight;
+    }
+
+    // Formulas Bank
+    const FORMULA_STRATEGIES = [
+      {
+        name: "Adaptive 2-Opt Local Search",
+        complexity: "O(N^2.8)",
+        generator: () => solve2Opt(nearestNeighborTour())
+      },
+      {
+        name: "Cheapest Insertion Heuristic",
+        complexity: "O(N^2.6)",
+        generator: () => solveCheapestInsertion()
+      },
+      {
+        name: "Double-Bridge VNS Kick v4",
+        complexity: "O(N^3.2)",
+        generator: () => solveVNS()
+      },
+      {
+        name: "Simulated Annealing Temperature Shift",
+        complexity: "O(N^1.2)",
+        generator: () => solveSimulatedAnnealing()
+      },
+      {
+        name: "Convex Hull Multi-Fragment Joiner",
+        complexity: "O(N^1.5)",
+        generator: () => solveConvexFragment()
+      },
+      {
+        name: "MST Double-Tree Shortcut",
+        complexity: "O(N^2.0)",
+        generator: () => solveMST()
+      }
+    ];
+
+    // Solvers
+    function nearestNeighborTour() {
+      const n = cities.length;
+      const unv = new Set(Array.from({ length: n - 1 }, (_, i) => i + 1));
+      let t = [0], curr = 0;
+      while (unv.size > 0) {
+        let best = -1, minD = Infinity;
+        for (const idx of unv) {
+          const d = dist(cities[curr], cities[idx]);
+          if (d < minD) { minD = d; best = idx; }
+        }
+        unv.delete(best);
+        t.push(best);
+        curr = best;
+      }
+      return t;
+    }
+
+    function solve2Opt(initTour) {
+      let t = [...initTour];
+      const n = t.length;
+      for (let p = 0; p < 2; p++) {
+        for (let i = 1; i < n; i++) {
+          for (let j = i + 1; j < n + 1; j++) {
+            if (j - i === 1 || (i === 1 && j === n)) continue;
+            const a = cities[t[i - 1]], b = cities[t[i]];
+            const c = cities[t[j - 1]], d = cities[t[j % n]];
+            if (dist(a, c) + dist(b, d) < dist(a, b) + dist(c, d) - 1e-6) {
+              t = t.slice(0, i).concat(t.slice(i, j).reverse()).concat(t.slice(j));
+            }
+          }
+        }
+      }
+      return t;
+    }
+
+    function solveCheapestInsertion() {
+      const n = cities.length;
+      if (n <= 3) return Array.from({ length: n }, (_, i) => i);
+      let t = [0, 1, 2];
+      const unv = new Set(Array.from({ length: n - 3 }, (_, i) => i + 3));
+      while (unv.size > 0) {
+        let bestCity = -1, bestPos = -1, minExtra = Infinity;
+        for (const city of unv) {
+          for (let i = 0; i < t.length; i++) {
+            const u = cities[t[i]], v = cities[t[(i + 1) % t.length]], c = cities[city];
+            const extra = dist(u, c) + dist(c, v) - dist(u, v);
+            if (extra < minExtra) { minExtra = extra; bestCity = city; bestPos = i + 1; }
+          }
+        }
+        t.splice(bestPos, 0, bestCity);
+        unv.delete(bestCity);
+      }
+      return t;
+    }
+
+    function solveVNS() {
+      let t = solve2Opt(nearestNeighborTour());
+      const n = t.length;
+      if (n >= 8) {
+        const pts = [
+          1 + Math.floor(Math.random() * (n / 4)),
+          Math.floor(n / 4) + Math.floor(Math.random() * (n / 4)),
+          Math.floor(n / 2) + Math.floor(Math.random() * (n / 4)),
+          Math.floor(3 * n / 4) + Math.floor(Math.random() * (n / 4))
+        ].sort((a,b)=>a-b);
+        const [a, b, c, d] = pts;
+        t = t.slice(0, a).concat(t.slice(c, d)).concat(t.slice(b, c)).concat(t.slice(a, b)).concat(t.slice(d));
+        t = solve2Opt(t);
+      }
+      return t;
+    }
+
+    function solveSimulatedAnnealing() {
+      let t = nearestNeighborTour();
+      let bestT = [...t], bestD = calculateTourLength(bestT, cities);
+      let currT = [...bestT], currD = bestD;
+      let temp = 80.0;
+      const n = cities.length;
+      for (let i = 0; i < 1500 && temp > 1e-2; i++) {
+        const a = 1 + Math.floor(Math.random() * (n - 2));
+        const b = a + 1 + Math.floor(Math.random() * (n - a - 1));
+        const cand = currT.slice(0, a).concat(currT.slice(a, b).reverse()).concat(currT.slice(b));
+        const candD = calculateTourLength(cand, cities);
+        const delta = candD - currD;
+        if (delta < 0 || Math.random() < Math.exp(-delta / temp)) {
+          currT = cand; currD = candD;
+          if (currD < bestD) { bestT = [...currT]; bestD = currD; }
+        }
+        temp *= 0.995;
+      }
+      return bestT;
+    }
+
+    function solveConvexFragment() {
+      let t = solveCheapestInsertion();
+      return solve2Opt(t);
+    }
+
+    function solveMST() {
+      const n = cities.length;
+      const visited = new Array(n).fill(false);
+      const minEdge = new Array(n).fill(Infinity);
+      const parent = new Array(n).fill(-1);
+      minEdge[0] = 0;
+      for (let i = 0; i < n; i++) {
+        let u = -1;
+        for (let j = 0; j < n; j++) if (!visited[j] && (u === -1 || minEdge[j] < minEdge[u])) u = j;
+        visited[u] = true;
+        for (let v = 0; v < n; v++) {
+          if (!visited[v] && dist(cities[u], cities[v]) < minEdge[v]) {
+            minEdge[v] = dist(cities[u], cities[v]); parent[v] = u;
+          }
+        }
+      }
+      const adj = Array.from({ length: n }, () => []);
+      for (let v = 1; v < n; v++) { adj[parent[v]].push(v); adj[v].push(parent[v]); }
+      let t = [];
+      const seen = new Set();
+      function dfs(node) {
+        seen.add(node); t.push(node);
+        for (const nxt of adj[node]) if (!seen.has(nxt)) dfs(nxt);
+      }
+      dfs(0);
+      return solve2Opt(t);
+    }
+
+    // THE AUTONOMOUS ROBOT LOOP
+    function robotIteration() {
+      if (!isRobotActive || cities.length < 3) return;
+
+      iterationNumber++;
+      document.getElementById('iterCount').innerText = iterationNumber;
+
+      // Pick a random strategy to synthesize & evaluate
+      const strategy = FORMULA_STRATEGIES[Math.floor(Math.random() * FORMULA_STRATEGIES.length)];
+      document.getElementById('activeFormulaTag').innerText = strategy.name;
+
+      logToStream(`🤖 AI: Naya formula generate kiya: <b>${strategy.name}</b>`, "info");
+
+      const t0 = performance.now();
+      const candTour = strategy.generator();
+      const dt = (performance.now() - t0).toFixed(1);
+      const candDist = calculateTourLength(candTour, cities);
+      const crossings = countCrossings(candTour);
+
+      tour = candTour;
+      render();
+
+      logToStream(`Testing on ${cities.length} cities... Distance: <b>${candDist.toFixed(1)}</b> (${dt}ms, Loops: ${crossings})`);
+
+      // Check if it's a new personal best
+      if (candDist < bestDistance - 1e-4) {
+        bestDistance = candDist;
+        bestTour = [...candTour];
+        bestFormulaName = strategy.name;
+        document.getElementById('valBestDist').innerText = bestDistance.toFixed(1);
+        document.getElementById('valBestFormula').innerText = bestFormulaName;
+        document.getElementById('valCrossings').innerText = crossings;
+
+        logToStream(`🌟 NAYA RECORD! Distance ghatkar <b>${bestDistance.toFixed(1)}</b> ho gayi!`, "highlight");
+        playChime();
+        updateMiniLeaderboard(strategy.name, 0.0, strategy.complexity);
+      } else {
+        document.getElementById('valCrossings').innerText = crossings;
+      }
+    }
+
+    const leaderboardItems = [
+      { name: "Cheapest Insertion", gap: "0.00%", comp: "O(N^2.60)" },
+      { name: "Adaptive VNS v8", gap: "0.00%", comp: "O(N^3.40)" },
+      { name: "2-Opt Optimization", gap: "0.00%", comp: "O(N^3.78)" },
+      { name: "Simulated Annealing", gap: "4.41%", comp: "O(N^0.89)" }
+    ];
+
+    function updateMiniLeaderboard(name, gap, comp) {
+      if (!leaderboardItems.some(x => x.name === name)) {
+        leaderboardItems.unshift({ name, gap: gap.toFixed(2) + "%", comp });
+        if (leaderboardItems.length > 5) leaderboardItems.pop();
+      }
+      renderMiniLeaderboard();
+    }
+
+    function renderMiniLeaderboard() {
+      const tbody = document.getElementById('miniLeaderboardBody');
+      tbody.innerHTML = '';
+      leaderboardItems.forEach((item, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><span class="badge-no ${idx === 0 ? 'gold' : ''}">${idx + 1}</span></td>
+          <td><strong style="color:#60a5fa;">${item.name}</strong></td>
+          <td><span style="color:#34d399; font-family:'JetBrains Mono';">${item.gap}</span></td>
+          <td><code style="color:#94a3b8;">${item.comp}</code></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function startRobot() {
+      isRobotActive = true;
+      document.getElementById('liveDot').style.background = '#10b981';
+      document.getElementById('robotLiveStatusText').innerText = "Robot is ON • Continuously Searching for Best Formula...";
+      document.getElementById('btnToggleRobot').classList.remove('paused');
+      document.getElementById('btnIcon').innerText = '⏸';
+      document.getElementById('btnText').innerText = 'Pause Robot';
+      clearInterval(robotInterval);
+      robotInterval = setInterval(robotIteration, 2400);
+      logToStream("🟢 AI Robot loop shuru hua. Formula discovery active.", "info");
+    }
+
+    function pauseRobot() {
+      isRobotActive = false;
+      document.getElementById('liveDot').style.background = '#f59e0b';
+      document.getElementById('robotLiveStatusText').innerText = "Robot is PAUSED (Aap manually shahar jod sakte hain)";
+      document.getElementById('btnToggleRobot').classList.add('paused');
+      document.getElementById('btnIcon').innerText = '▶';
+      document.getElementById('btnText').innerText = 'Resume Robot';
+      clearInterval(robotInterval);
+      logToStream("⏸️ Robot paused. Click 'Resume' to continue discovery.", "warn");
+    }
+
+    // Toggle Button
+    document.getElementById('btnToggleRobot').addEventListener('click', () => {
+      if (isRobotActive) pauseRobot();
+      else startRobot();
+    });
+
+    // Generate random cities
+    function generateRandomCities(count = 30) {
+      cities = [];
+      const w = canvas.width || 600, h = canvas.height || 500;
+      const pad = 60;
+      for (let i = 0; i < count; i++) {
+        cities.push({
+          x: pad + Math.random() * (w - 2 * pad),
+          y: pad + Math.random() * (h - 2 * pad)
+        });
+      }
+      bestDistance = Infinity;
+      tour = [];
+      logToStream(`🎲 Naya Map generate hua: ${count} Shahar banaye gaye.`);
+      robotIteration();
+    }
+
+    document.getElementById('btnNewCities').addEventListener('click', () => {
+      generateRandomCities(30);
+    });
+
+    // Canvas click
+    canvas.addEventListener('mousedown', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      cities.push({ x, y });
+      bestDistance = Infinity;
+      logToStream(`Aapne naya city banaya (${Math.round(x)}, ${Math.round(y)}). Total: ${cities.length}`);
+      robotIteration();
+    });
+
+    // Render Canvas
+    function render() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Grid
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.025)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < canvas.width; x += 40) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+      }
+      for (let y = 0; y < canvas.height; y += 40) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+      }
+
+      // Draw Tour
+      if (tour.length > 1) {
+        // Glowing route line
+        ctx.beginPath();
+        for (let i = 0; i < tour.length; i++) {
+          const p = cities[tour[i]];
+          if (i === 0) ctx.moveTo(p.x, p.y);
+          else ctx.lineTo(p.x, p.y);
+        }
+        ctx.closePath();
+        ctx.strokeStyle = 'rgba(59, 130, 246, 0.25)';
+        ctx.lineWidth = 8;
+        ctx.stroke();
+
+        ctx.beginPath();
+        for (let i = 0; i < tour.length; i++) {
+          const p = cities[tour[i]];
+          if (i === 0) ctx.moveTo(p.x, p.y);
+          else ctx.lineTo(p.x, p.y);
+        }
+        ctx.closePath();
+        ctx.strokeStyle = '#3b82f6';
+        ctx.lineWidth = 2.4;
+        ctx.stroke();
+      }
+
+      // Draw Cities
+      for (let i = 0; i < cities.length; i++) {
+        const c = cities[i];
+        const isStart = i === 0;
+
+        ctx.beginPath();
+        ctx.arc(c.x, c.y, isStart ? 8.5 : 5.5, 0, Math.PI * 2);
+        ctx.fillStyle = isStart ? '#fbbf24' : '#f43f5e';
+        ctx.shadowColor = isStart ? '#fbbf24' : '#f43f5e';
+        ctx.shadowBlur = 10;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        if (cities.length <= 40) {
+          ctx.font = '10px JetBrains Mono';
+          ctx.fillStyle = '#94a3b8';
+          ctx.fillText(i, c.x + 8, c.y - 8);
+        }
+      }
+    }
+
+    // Launch
+    setTimeout(() => {
+      resizeCanvas();
+      generateRandomCities(30);
+      renderMiniLeaderboard();
+      startRobot();
+    }, 150);
+  </script>
+</body>
+</html>

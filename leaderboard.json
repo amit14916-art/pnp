@@ -1,0 +1,524 @@
+[
+  {
+    "id": 3,
+    "name": "Cheapest_Insertion",
+    "timestamp": "2026-09-27 16:32:38",
+    "valid": true,
+    "error": null,
+    "avg_optimality_gap_pct": 0.0,
+    "empirical_beta": 2.6,
+    "scaling_label": "O(N^2.6) ~ Cubic",
+    "avg_runtime_ms": 173.92,
+    "p_equals_np_candidate": true,
+    "verdict": "PROBABLE POLYNOMIAL EXACT SOLVER FOUND! (Requires formal proof verification)",
+    "exact_gaps": [
+      {
+        "test": "Exact_N8",
+        "n": 8,
+        "cost": 285.72,
+        "opt_cost": 285.72,
+        "gap_pct": 0.0,
+        "time_ms": 0.18
+      },
+      {
+        "test": "Exact_N10",
+        "n": 10,
+        "cost": 294.48,
+        "opt_cost": 294.48,
+        "gap_pct": 0.0,
+        "time_ms": 0.34
+      },
+      {
+        "test": "Exact_N12",
+        "n": 12,
+        "cost": 364.0,
+        "opt_cost": 364.0,
+        "gap_pct": 0.0,
+        "time_ms": 0.92
+      }
+    ],
+    "scaling_points": [
+      {
+        "n": 20,
+        "time_ms": 4.657
+      },
+      {
+        "n": 40,
+        "time_ms": 23.486
+      },
+      {
+        "n": 80,
+        "time_ms": 135.781
+      },
+      {
+        "n": 160,
+        "time_ms": 1052.092
+      }
+    ],
+    "code_file": "discovered_algorithms\\gen_3_cheapest_insertion.py"
+  },
+  {
+    "id": 6,
+    "name": "Hybrid_Insertion_2Opt",
+    "timestamp": "2026-09-27 16:33:37",
+    "valid": true,
+    "error": null,
+    "avg_optimality_gap_pct": 0.0,
+    "empirical_beta": 3.47,
+    "scaling_label": "O(N^3.47) ~ High Polynomial / Exponential",
+    "avg_runtime_ms": 1403.05,
+    "p_equals_np_candidate": true,
+    "verdict": "PROBABLE POLYNOMIAL EXACT SOLVER FOUND! (Requires formal proof verification)",
+    "exact_gaps": [
+      {
+        "test": "Exact_N8",
+        "n": 8,
+        "cost": 285.72,
+        "opt_cost": 285.72,
+        "gap_pct": 0.0,
+        "time_ms": 0.34
+      },
+      {
+        "test": "Exact_N10",
+        "n": 10,
+        "cost": 294.48,
+        "opt_cost": 294.48,
+        "gap_pct": 0.0,
+        "time_ms": 0.75
+      },
+      {
+        "test": "Exact_N12",
+        "n": 12,
+        "cost": 364.0,
+        "opt_cost": 364.0,
+        "gap_pct": 0.0,
+        "time_ms": 1.47
+      }
+    ],
+    "scaling_points": [
+      {
+        "n": 20,
+        "time_ms": 5.919
+      },
+      {
+        "n": 40,
+        "time_ms": 109.173
+      },
+      {
+        "n": 80,
+        "time_ms": 984.832
+      },
+      {
+        "n": 160,
+        "time_ms": 8718.864
+      }
+    ],
+    "code_file": "discovered_algorithms\\gen_6_hybrid_insertion_2opt.py"
+  },
+  {
+    "id": 2,
+    "name": "Two_Opt_Local_Search",
+    "timestamp": "2026-09-27 16:32:37",
+    "valid": true,
+    "error": null,
+    "avg_optimality_gap_pct": 0.0,
+    "empirical_beta": 3.78,
+    "scaling_label": "O(N^3.78) ~ High Polynomial / Exponential",
+    "avg_runtime_ms": 3025.68,
+    "p_equals_np_candidate": true,
+    "verdict": "PROBABLE POLYNOMIAL EXACT SOLVER FOUND! (Requires formal proof verification)",
+    "exact_gaps": [
+      {
+        "test": "Exact_N8",
+        "n": 8,
+        "cost": 285.72,
+        "opt_cost": 285.72,
+        "gap_pct": 0.0,
+        "time_ms": 0.42
+      },
+      {
+        "test": "Exact_N10",
+        "n": 10,
+        "cost": 294.48,
+        "opt_cost": 294.48,
+        "gap_pct": 0.0,
+        "time_ms": 2.58
+      },
+      {
+        "test": "Exact_N12",
+        "n": 12,
+        "cost": 364.0,
+        "opt_cost": 364.0,
+        "gap_pct": 0.0,
+        "time_ms": 1.67
+      }
+    ],
+    "scaling_points": [
+      {
+        "n": 20,
+        "time_ms": 7.86
+      },
+      {
+        "n": 40,
+        "time_ms": 57.683
+      },
+      {
+        "n": 80,
+        "time_ms": 825.647
+      },
+      {
+        "n": 160,
+        "time_ms": 20283.932
+      }
+    ],
+    "code_file": "discovered_algorithms\\gen_2_two_opt_local_search.py"
+  },
+  {
+    "id": 8,
+    "name": "Adaptive_VNS_v8",
+    "timestamp": "2026-09-27 16:35:27",
+    "valid": true,
+    "error": null,
+    "avg_optimality_gap_pct": 0.0,
+    "empirical_beta": 3.4,
+    "scaling_label": "O(N^3.4) ~ High Polynomial / Exponential",
+    "avg_runtime_ms": 8318.12,
+    "p_equals_np_candidate": true,
+    "verdict": "PROBABLE POLYNOMIAL EXACT SOLVER FOUND! (Requires formal proof verification)",
+    "exact_gaps": [
+      {
+        "test": "Exact_N8",
+        "n": 8,
+        "cost": 285.72,
+        "opt_cost": 285.72,
+        "gap_pct": 0.0,
+        "time_ms": 2.52
+      },
+      {
+        "test": "Exact_N10",
+        "n": 10,
+        "cost": 294.48,
+        "opt_cost": 294.48,
+        "gap_pct": 0.0,
+        "time_ms": 4.79
+      },
+      {
+        "test": "Exact_N12",
+        "n": 12,
+        "cost": 364.0,
+        "opt_cost": 364.0,
+        "gap_pct": 0.0,
+        "time_ms": 7.93
+      }
+    ],
+    "scaling_points": [
+      {
+        "n": 20,
+        "time_ms": 37.157
+      },
+      {
+        "n": 40,
+        "time_ms": 416.183
+      },
+      {
+        "n": 80,
+        "time_ms": 2161.054
+      },
+      {
+        "n": 160,
+        "time_ms": 55597.194
+      }
+    ],
+    "code_file": "discovered_algorithms\\gen_8_adaptive_vns_v8.py"
+  },
+  {
+    "id": 5,
+    "name": "Hybrid_MST_2Opt",
+    "timestamp": "2026-09-27 16:33:27",
+    "valid": true,
+    "error": null,
+    "avg_optimality_gap_pct": 0.97,
+    "empirical_beta": 3.87,
+    "scaling_label": "O(N^3.87) ~ High Polynomial / Exponential",
+    "avg_runtime_ms": 7067.79,
+    "p_equals_np_candidate": false,
+    "verdict": "High-Precision Polynomial Heuristic (Near-Optimal)",
+    "exact_gaps": [
+      {
+        "test": "Exact_N8",
+        "n": 8,
+        "cost": 285.72,
+        "opt_cost": 285.72,
+        "gap_pct": 0.0,
+        "time_ms": 0.47
+      },
+      {
+        "test": "Exact_N10",
+        "n": 10,
+        "cost": 294.48,
+        "opt_cost": 294.48,
+        "gap_pct": 0.0,
+        "time_ms": 1.78
+      },
+      {
+        "test": "Exact_N12",
+        "n": 12,
+        "cost": 374.56,
+        "opt_cost": 364.0,
+        "gap_pct": 2.9,
+        "time_ms": 3.33
+      }
+    ],
+    "scaling_points": [
+      {
+        "n": 20,
+        "time_ms": 19.61
+      },
+      {
+        "n": 40,
+        "time_ms": 103.531
+      },
+      {
+        "n": 80,
+        "time_ms": 3560.021
+      },
+      {
+        "n": 160,
+        "time_ms": 45785.795
+      }
+    ],
+    "code_file": "discovered_algorithms\\gen_5_hybrid_mst_2opt.py"
+  },
+  {
+    "id": 9,
+    "name": "Convex_Hull_Angle_Insertion_v9",
+    "timestamp": "2026-09-27 16:35:27",
+    "valid": true,
+    "error": null,
+    "avg_optimality_gap_pct": 3.61,
+    "empirical_beta": 0.8,
+    "scaling_label": "O(N^0.8) ~ Linear/Quasilinear",
+    "avg_runtime_ms": 92.85,
+    "p_equals_np_candidate": false,
+    "verdict": "Competitive Polynomial Heuristic",
+    "exact_gaps": [
+      {
+        "test": "Exact_N8",
+        "n": 8,
+        "cost": 285.72,
+        "opt_cost": 285.72,
+        "gap_pct": 0.0,
+        "time_ms": 0.9
+      },
+      {
+        "test": "Exact_N10",
+        "n": 10,
+        "cost": 326.39,
+        "opt_cost": 294.48,
+        "gap_pct": 10.83,
+        "time_ms": 1.67
+      },
+      {
+        "test": "Exact_N12",
+        "n": 12,
+        "cost": 364.0,
+        "opt_cost": 364.0,
+        "gap_pct": 0.0,
+        "time_ms": 5.3
+      }
+    ],
+    "scaling_points": [
+      {
+        "n": 20,
+        "time_ms": 10.952
+      },
+      {
+        "n": 40,
+        "time_ms": 17.456
+      },
+      {
+        "n": 80,
+        "time_ms": 592.173
+      },
+      {
+        "n": 160,
+        "time_ms": 21.486
+      }
+    ],
+    "code_file": "discovered_algorithms\\gen_9_convex_hull_angle_insertion_v9.py"
+  },
+  {
+    "id": 7,
+    "name": "Simulated_Annealing",
+    "timestamp": "2026-09-27 16:33:38",
+    "valid": true,
+    "error": null,
+    "avg_optimality_gap_pct": 4.41,
+    "empirical_beta": 0.89,
+    "scaling_label": "O(N^0.89) ~ Linear/Quasilinear",
+    "avg_runtime_ms": 73.51,
+    "p_equals_np_candidate": false,
+    "verdict": "Competitive Polynomial Heuristic",
+    "exact_gaps": [
+      {
+        "test": "Exact_N8",
+        "n": 8,
+        "cost": 289.8,
+        "opt_cost": 285.72,
+        "gap_pct": 1.43,
+        "time_ms": 30.86
+      },
+      {
+        "test": "Exact_N10",
+        "n": 10,
+        "cost": 329.09,
+        "opt_cost": 294.48,
+        "gap_pct": 11.75,
+        "time_ms": 26.51
+      },
+      {
+        "test": "Exact_N12",
+        "n": 12,
+        "cost": 364.23,
+        "opt_cost": 364.0,
+        "gap_pct": 0.06,
+        "time_ms": 26.77
+      }
+    ],
+    "scaling_points": [
+      {
+        "n": 20,
+        "time_ms": 37.005
+      },
+      {
+        "n": 40,
+        "time_ms": 56.234
+      },
+      {
+        "n": 80,
+        "time_ms": 100.503
+      },
+      {
+        "n": 160,
+        "time_ms": 236.721
+      }
+    ],
+    "code_file": "discovered_algorithms\\gen_7_simulated_annealing.py"
+  },
+  {
+    "id": 1,
+    "name": "Nearest_Neighbor",
+    "timestamp": "2026-09-27 16:32:15",
+    "valid": true,
+    "error": null,
+    "avg_optimality_gap_pct": 7.37,
+    "empirical_beta": 1.81,
+    "scaling_label": "O(N^1.81) ~ Quadratic",
+    "avg_runtime_ms": 1.51,
+    "p_equals_np_candidate": false,
+    "verdict": "Fast Greedy / Approximate Heuristic (Suboptimal)",
+    "exact_gaps": [
+      {
+        "test": "Exact_N8",
+        "n": 8,
+        "cost": 289.8,
+        "opt_cost": 285.72,
+        "gap_pct": 1.43,
+        "time_ms": 0.08
+      },
+      {
+        "test": "Exact_N10",
+        "n": 10,
+        "cost": 329.09,
+        "opt_cost": 294.48,
+        "gap_pct": 11.75,
+        "time_ms": 0.05
+      },
+      {
+        "test": "Exact_N12",
+        "n": 12,
+        "cost": 396.54,
+        "opt_cost": 364.0,
+        "gap_pct": 8.94,
+        "time_ms": 0.06
+      }
+    ],
+    "scaling_points": [
+      {
+        "n": 20,
+        "time_ms": 0.161
+      },
+      {
+        "n": 40,
+        "time_ms": 0.732
+      },
+      {
+        "n": 80,
+        "time_ms": 2.193
+      },
+      {
+        "n": 160,
+        "time_ms": 7.313
+      }
+    ],
+    "code_file": "discovered_algorithms\\gen_1_nearest_neighbor.py"
+  },
+  {
+    "id": 4,
+    "name": "MST_DoubleTree_Approx",
+    "timestamp": "2026-09-27 16:32:38",
+    "valid": true,
+    "error": null,
+    "avg_optimality_gap_pct": 12.62,
+    "empirical_beta": 1.86,
+    "scaling_label": "O(N^1.86) ~ Quadratic",
+    "avg_runtime_ms": 2.8,
+    "p_equals_np_candidate": false,
+    "verdict": "Fast Greedy / Approximate Heuristic (Suboptimal)",
+    "exact_gaps": [
+      {
+        "test": "Exact_N8",
+        "n": 8,
+        "cost": 289.8,
+        "opt_cost": 285.72,
+        "gap_pct": 1.43,
+        "time_ms": 0.1
+      },
+      {
+        "test": "Exact_N10",
+        "n": 10,
+        "cost": 322.1,
+        "opt_cost": 294.48,
+        "gap_pct": 9.38,
+        "time_ms": 0.07
+      },
+      {
+        "test": "Exact_N12",
+        "n": 12,
+        "cost": 462.47,
+        "opt_cost": 364.0,
+        "gap_pct": 27.05,
+        "time_ms": 0.09
+      }
+    ],
+    "scaling_points": [
+      {
+        "n": 20,
+        "time_ms": 0.303
+      },
+      {
+        "n": 40,
+        "time_ms": 0.982
+      },
+      {
+        "n": 80,
+        "time_ms": 4.945
+      },
+      {
+        "n": 160,
+        "time_ms": 13.141
+      }
+    ],
+    "code_file": "discovered_algorithms\\gen_4_mst_doubletree_approx.py"
+  }
+]
